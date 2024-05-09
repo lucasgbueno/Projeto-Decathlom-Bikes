@@ -19,27 +19,10 @@ variable "custom_data_script" {
               #!/bin/bash
               sudo yum update -y
               sudo yum install -y nfs-utils
+              sudo mkdir /mnt/efs
+              sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-03feb458a214b755e.efs.us-east-1.amazonaws.com:/ efs
+              sudo touch /mnt/efs/test
               EOF
-}
-
-resource "aws_security_group" "instance_sg" {
-  name        = "instance-efs-sg"
-  description = "Allow SSH and HTTP inbound traffic"
-  vpc_id      = "vpc-08e93608cbfe1a2f2"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 # Criar EC2 Linux
@@ -47,18 +30,14 @@ resource "aws_instance" "linux_EFS" {
   count                       = 2
   ami                         = "ami-04ff98ccbfa41c9ad" # Amazon linux 2
   instance_type               = "t2.micro"
-  subnet_id                   = "subnet-05094be3cbd7c5361"
-#  key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
+  subnet_id                   = "subnet-08fedf52cca8dde8f"
+  key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
   associate_public_ip_address = true
   vpc_security_group_ids      = ["${aws_security_group.instance_sg.id}"]
   user_data                   = var.custom_data_script
   tags = {
     Name = "Linux-EFS-${count.index}"
   }
-}
-
-output "security_group_id" {
-  value = aws_security_group.instance_sg.id
 }
 
 # Exibir IP público das maquinas
