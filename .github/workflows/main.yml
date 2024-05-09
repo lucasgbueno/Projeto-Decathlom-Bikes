@@ -32,6 +32,7 @@ jobs:
         run: |
           terraform init
           terraform apply --auto-approve
+      - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
           
