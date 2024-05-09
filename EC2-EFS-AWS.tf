@@ -25,6 +25,7 @@ variable "custom_data_script" {
 resource "aws_security_group" "instance_sg" {
   name        = "instance-efs-sg"
   description = "Allow SSH and HTTP inbound traffic"
+  vpc_id      = "vpc-08e93608cbfe1a2f2"
 
   ingress {
     from_port   = 22
@@ -46,6 +47,7 @@ resource "aws_instance" "linux_EFS" {
   count                       = 2
   ami                         = "ami-04ff98ccbfa41c9ad" # Amazon linux 2
   instance_type               = "t2.micro"
+  subnet_id                   = "subnet-05094be3cbd7c5361"
   key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
   associate_public_ip_address = true
   vpc_security_group_ids      = ["${aws_security_group.instance_sg.id}"]
@@ -57,7 +59,7 @@ resource "aws_instance" "linux_EFS" {
 
 # Exibir IP público das maquinas
 output "instance_ips" {
- description = "IP Publico da Instancia EC2 linux"
- value = aws_instance.linux_EFS[*].public_ip
+  description = "IP Publico da Instancia EC2 linux"
+  value       = aws_instance.linux_EFS[*].public_ip
 }
 
