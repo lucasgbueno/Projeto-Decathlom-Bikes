@@ -13,7 +13,15 @@ jobs:
       - name: Checkout repository
         if: always()
         uses: actions/checkout@v2
-
+        
+      - name: INSTALL PACKAGES
+        run: |
+          apt update -y
+          apt install unzip -y
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          
       - name: Configure AWS CLI
         if: always()
         uses: aws-actions/configure-aws-credentials@v4
