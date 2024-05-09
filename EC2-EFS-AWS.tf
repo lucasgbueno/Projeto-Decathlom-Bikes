@@ -17,8 +17,8 @@ provider "aws" {
 variable "custom_data_script" {
   default = <<-EOF
               #!/bin/bash
-              apt-get update
-              apt-get install -y nfs-common
+              sudo yum update -y
+              sudo yum install -y nfs-utils
               EOF
 }
 
