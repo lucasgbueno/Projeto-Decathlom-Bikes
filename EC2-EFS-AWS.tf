@@ -57,6 +57,10 @@ resource "aws_instance" "linux_EFS" {
   }
 }
 
+output "security_group_id" {
+  value = aws_security_group.instance_sg.id
+}
+
 # Exibir IP público das maquinas
 output "instance_ips" {
   description = "IP Publico da Instancia EC2 linux"
