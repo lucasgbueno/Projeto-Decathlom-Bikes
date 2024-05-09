@@ -1,0 +1,56 @@
+name: decathlon-bikes_automacao
+run-name: ${{ github.actor }} Pipeline deploy
+on:
+  push:
+    branches:
+      - "develop"
+    paths-ignore:
+      - "*.txt"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        if: always()
+        uses: actions/checkout@v2
+        
+      - name: INSTALL PACKAGES
+        run: |
+          apt update -y
+          apt install unzip -y
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          
+      - name: Configure AWS CLI
+        if: always()
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Terraform Apply
+        if: always()
+        run: |
+          sudo apt update -y
+          sudo apt-get install terraform -y
+          terraform init
+          terraform apply --auto-approve
+          security_group_id=$(terraform output security_group_id)
+  
+      - name: Test aws cli
+        if: always()
+        run: aws sts get-caller-identity
+
+      - name: Criar EFS
+        if: always()
+        run: |
+          aws efs create-file-system --creation-token "Senai@134" --encrypted  --vpc-id vpc-08e93608cbfe1a2f2 --subnet-id subnet-05094be3cbd7c5361 --security-group-id $security_group_id
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+
+          
