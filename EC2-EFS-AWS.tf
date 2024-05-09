@@ -33,7 +33,7 @@ resource "aws_instance" "linux_EFS" {
   subnet_id                   = "subnet-08fedf52cca8dde8f"
   key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
   associate_public_ip_address = true
-  vpc_security_group_ids      = ["${aws_security_group.instance_sg.id}"]
+  vpc_security_group_ids      = "sg-0c1f6f466d3838230" #["${aws_security_group.instance_sg.id}"]
   user_data                   = var.custom_data_script
   tags = {
     Name = "Linux-EFS-${count.index}"
