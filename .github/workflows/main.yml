@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - "develop"
+    paths:
+      - '**/*.jpg'  # Define o padrão para arquivos de imagem (JPEG)
+      - '**/*.jpeg' # Outro padrão comum para arquivos de imagem
+      - '**/*.png'  # PNG
+      - '**/*.gif'  # GIF
     paths-ignore:
       - "*.txt"
 jobs:
