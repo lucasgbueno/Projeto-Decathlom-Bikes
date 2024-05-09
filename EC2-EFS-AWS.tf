@@ -17,8 +17,8 @@ provider "aws" {
 variable "custom_data_script" {
   default = <<-EOF
               #!/bin/bash
-              sudo apt-get update
-              sudo apt-get install -y nfs-common
+              apt-get update
+              apt-get install -y nfs-common
               EOF
 }
 
@@ -48,7 +48,7 @@ resource "aws_instance" "linux_EFS" {
   ami                         = "ami-04ff98ccbfa41c9ad" # Amazon linux 2
   instance_type               = "t2.micro"
   subnet_id                   = "subnet-05094be3cbd7c5361"
-  key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
+#  key_name                    = "vockey" # Não esqueca de gerar a chave  pública e privada para este nome!
   associate_public_ip_address = true
   vpc_security_group_ids      = ["${aws_security_group.instance_sg.id}"]
   user_data                   = var.custom_data_script
