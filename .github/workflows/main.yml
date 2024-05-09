@@ -32,7 +32,6 @@ jobs:
         run: |
           terraform init
           terraform apply --auto-approve
-          security_group_id=$(terraform output security_group_id)
 
 
           
