@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
           
       - name: INSTALL PACKAGES
+        if: always()
         run: |
           sudo apt update -y
           wget -O- https://apt.releases.hashicorp.com/gpg | \
