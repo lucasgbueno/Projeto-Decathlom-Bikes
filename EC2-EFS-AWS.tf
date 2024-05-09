@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "aws" {
-  region                   = "us-east-1"
-  shared_config_files      = ["C:/Users/admin/.aws/config"]
-  shared_credentials_files = ["C:/Users/admin/.aws/credentials"]
+ region = "us-east-1"
+ shared_config_files=["./aws/config"]
+ shared_credentials_files=["./aws/config"]
 }
 
 # Definição do script de inicialização
