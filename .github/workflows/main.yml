@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - "develop"
-    paths:
-      - "*.png"
-      - "*.jpg"
-      - "*.jpeg"
     paths-ignore:
       - "*.txt"
 jobs:
