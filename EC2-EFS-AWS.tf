@@ -20,8 +20,7 @@ variable "custom_data_script" {
               sudo yum update -y
               sudo yum install -y nfs-utils
               sudo mkdir /mnt/efs
-              sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-03feb458a214b755e.efs.us-east-1.amazonaws.com:/ efs
-              sudo touch /mnt/efs/test
+              sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-03feb458a214b755e.efs.us-east-1.amazonaws.com:/ /mnt/efs
               EOF
 }
 
