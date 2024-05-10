@@ -63,6 +63,8 @@ jobs:
 
       - name: Adicionar EC2 ao known-hosts
         run: |
+          export INSTANCE1_IP=$(terraform output -raw instance_ip_1)
+          echo $INSTANCE1_IP
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
           ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
         env:
