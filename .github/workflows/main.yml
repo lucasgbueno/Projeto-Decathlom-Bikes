@@ -54,5 +54,28 @@ jobs:
           terraform init
           terraform apply --auto-approve
 
+      - name: Obter IPs públicos das instâncias EC2
+        if: always()
+        id: get-ec2-ips
+        run: |
+          EC2_IPS=$(terraform output -json instance_ips | jq -r '.[]')
+          echo "IPs públicos das instâncias EC2: $EC2_IPS"
+          echo "::set-output name=ec2_ips::$EC2_IPS"
+
+      - name: Copiar arquivo para EC2
+        if: always()
+        run: |
+          # Variáveis de ambiente para autenticação SSH
+          export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"  # Chave privada SSH armazenada no GitHub Secrets
+          export SSH_USER="ec2-user"  # Substitua pelo usuário SSH da sua instância EC2
+          EC2_IPS="${{ steps.get-ec2-ips.outputs.ec2_ips }}"  # Obtém os endereços IP das instâncias EC2 a partir da etapa anterior
+          # Criar arquivo temporário para armazenar a chave privada
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          # Copiar arquivo para as instâncias EC2
+          for EC2_IP in $EC2_IPS; do
+            scp -i ~/.ssh/id_rsa key.txt $SSH_USER@$EC2_IP:/mnt/efs/  # Substitua "seu_arquivo.txt" pelo nome do arquivo e "/caminho/destino/" pelo caminho de destino na instância EC2
+
+
 
           
