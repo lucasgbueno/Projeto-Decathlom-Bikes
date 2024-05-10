@@ -63,6 +63,9 @@ jobs:
 
       - name: Adicionar EC2 ao known-hosts
         run: |
+          echo "O valor da variável é: $INSTANCE1_IP"
+          ls ~/.ssh/known_hosts
+          ls ~/.ssh/id_rsa
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
           ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
         env:
