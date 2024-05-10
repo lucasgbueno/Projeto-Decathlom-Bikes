@@ -52,7 +52,6 @@ jobs:
         if: always()
         run: |
           terraform init
-          terraform apply --auto-approve
 
       - name: Obter IPs públicos das instâncias EC2
         if: always()
@@ -66,7 +65,7 @@ jobs:
           export INSTANCE1_IP=$(terraform output -raw instance_ip_1)
           echo $INSTANCE1_IP
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
-          ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
+          ssh-keyscan -H 44.201.152.139 >> ~/.ssh/known_hosts
         env:
           INSTANCE1_IP: ${{ steps.get-instance-ip.outputs.instance_ip_1 }}
 
@@ -81,7 +80,7 @@ jobs:
           sleep 25
           sudo echo "$SSH_PRIVATE_KEY" > ssh_key.pem
           sudo chmod 600 ssh_key.pem
-          sudo scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
+          sudo scp -i ssh_key.pem images/* ec2-user@44.201.152.139:/mnt/efs
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           INSTANCE1_IP: ${{ steps.get-instance-ip.outputs.instance_ip_1 }}
