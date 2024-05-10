@@ -77,6 +77,7 @@ jobs:
           
       - name: Copiar imagens para maquina remota
         run: |
+          export INSTANCE1_IP=$(terraform output -raw instance_ip_1)
           sudo echo "$SSH_PRIVATE_KEY" > ssh_key.pem
           sudo chmod 600 ssh_key.pem
           sudo scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
