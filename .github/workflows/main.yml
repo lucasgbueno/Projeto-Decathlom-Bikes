@@ -67,18 +67,14 @@ jobs:
         run: |
           # Variáveis de ambiente para autenticação SSH
           export SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"  # Chave privada SSH armazenada no GitHub Secrets
-          export SSH_USER="ec2-user"  # Substitua pelo usuário SSH da sua instância EC2
           EC2_IPS="${{ steps.get-ec2-ips.outputs.ec2_ips }}"  # Obtém os endereços IP das instâncias EC2 a partir da etapa anterior
-          # Criar arquivo temporário para armazenar a chave privada
-          # Criar diretório ~/.ssh/ se não existir
           mkdir -p ~/.ssh/
           # Criar arquivo temporário para armazenar a chave privada se não existir
           echo "$SSH_PRIVATE_KEY" > ssh_key.pem
           chmod 600 ssh_key.pem
-          export SSH_KEY_FILE=$(realpath ssh_key.pem)
           # Copiar arquivo para as instâncias EC2
           for EC2_IP in $EC2_IPS; do
-            scp -i "$SSH_KEY_FILE"  "${{ github.workspace }}/images/*" $SSH_USER@$EC2_IP:/mnt/efs/
+            scp -i ssh_key.pem  "${{ github.workspace }}/images/*" $ec2-user@$EC2_IP:/mnt/efs/
 
 
 
