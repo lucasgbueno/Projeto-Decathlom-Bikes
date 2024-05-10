@@ -71,6 +71,7 @@ jobs:
           EC2_IPS="${{ steps.get-ec2-ips.outputs.ec2_ips }}"  # Obtém os endereços IP das instâncias EC2 a partir da etapa anterior
           # Criar arquivo temporário para armazenar a chave privada
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          ls ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           # Copiar arquivo para as instâncias EC2
           for EC2_IP in $EC2_IPS; do
