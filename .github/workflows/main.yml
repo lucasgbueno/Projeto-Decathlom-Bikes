@@ -58,8 +58,8 @@ jobs:
         if: always()
         id: get-ec2-ips
         run: |
-          INSTANCE1_IP=$(terraform output -raw instance_ip_1)
-          INSTANCE2_IP=$(terraform output -raw instance_ip_2)
+          export INSTANCE1_IP=$(terraform output -raw instance_ip_1)
+          export INSTANCE2_IP=$(terraform output -raw instance_ip_2)
 
       - name: Adicionar EC2 ao known-hosts
         run: |
