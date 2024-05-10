@@ -63,11 +63,11 @@ jobs:
 
       - name: Adicionar EC2 ao known-hosts
         run: |
-          echo "O valor da variável é: $INSTANCE1_IP"
+          echo "O valor da variável é: "$INSTANCE1_IP
           ls ~/.ssh/known_hosts
           ls ~/.ssh/id_rsa
-          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
-          ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
+          sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
+          sudo ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
         env:
           EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
 
@@ -78,9 +78,9 @@ jobs:
           
       - name: Copiar imagens para maquina remota
         run: |
-          echo "$SSH_PRIVATE_KEY" > ssh_key.pem
-          chmod 600 ssh_key.pem
-          scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
+          sudo echo "$SSH_PRIVATE_KEY" > ssh_key.pem
+          sudo chmod 600 ssh_key.pem
+          sudo scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
