@@ -63,7 +63,7 @@ jobs:
 
       - name: Adicionar EC2 ao known-hosts
         run: |
-          ssh-keygen -F rsa -b 4096 -f ~/.ssh/id_rsa -N ''
+          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
           ssh-keyscan -F $INSTANCE1_IP >> ~/.ssh/known_hosts
         env:
           INSTANCE1_IP: ${{ steps.get-instance-ip.outputs.instance_ip_1 }}
