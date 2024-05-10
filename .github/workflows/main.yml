@@ -73,13 +73,12 @@ jobs:
           # Criar diretório ~/.ssh/ se não existir
           mkdir -p ~/.ssh/
           # Criar arquivo temporário para armazenar a chave privada se não existir
-          if [ ! -f ~/.ssh/id_rsa ]; then
-            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ssh_key.pem
+          chmod 600 ssh_key.pem
           ls ~/.ssh/id_rsa
           # Copiar arquivo para as instâncias EC2
           for EC2_IP in $EC2_IPS; do
-            scp -i ~/.ssh/id_rsa key.txt $SSH_USER@$EC2_IP:/mnt/efs/  # Substitua "seu_arquivo.txt" pelo nome do arquivo e "/caminho/destino/" pelo caminho de destino na instância EC2
+            scp -i "$SSH_KEY_FILE" key.txt $SSH_USER@$EC2_IP:/mnt/efs/
 
 
 
