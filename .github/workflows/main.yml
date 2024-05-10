@@ -75,10 +75,10 @@ jobs:
           # Criar arquivo temporário para armazenar a chave privada se não existir
           echo "$SSH_PRIVATE_KEY" > ssh_key.pem
           chmod 600 ssh_key.pem
-          ls ~/.ssh/id_rsa
+          export SSH_KEY_FILE=$(realpath ssh_key.pem)
           # Copiar arquivo para as instâncias EC2
           for EC2_IP in $EC2_IPS; do
-            scp -i "$SSH_KEY_FILE" key.txt $SSH_USER@$EC2_IP:/mnt/efs/
+            scp -i "$SSH_KEY_FILE"  "${{ github.workspace }}/images/*" $SSH_USER@$EC2_IP:/mnt/efs/
 
 
 
