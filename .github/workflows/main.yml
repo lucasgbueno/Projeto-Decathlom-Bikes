@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - "develop"
-    paths:
-      - '**/*.jpg'  # Define o padrão para arquivos de imagem (JPEG)
-      - '**/*.jpeg' # Outro padrão comum para arquivos de imagem
-      - '**/*.png'  # PNG
-      - '**/*.gif'  # GIF
+#    paths:
+#      - '**/*.jpg'  # Define o padrão para arquivos de imagem (JPEG)
+#      - '**/*.jpeg' # Outro padrão comum para arquivos de imagem
+#      - '**/*.png'  # PNG
+#      - '**/*.gif'  # GIF
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -65,7 +65,8 @@ jobs:
         run: |
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
           ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
-          ssh-keyscan -H $INSTANCE2_IP >> ~/.ssh/known_hosts
+        env:
+          EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
 
       - name: Verificar a chave
         run: echo "$SSH_PRIVATE_KEY"
@@ -79,6 +80,7 @@ jobs:
           scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
 
 
 
