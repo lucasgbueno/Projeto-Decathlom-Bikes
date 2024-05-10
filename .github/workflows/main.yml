@@ -9,8 +9,6 @@ on:
       - '**/*.jpeg' # Outro padrão comum para arquivos de imagem
       - '**/*.png'  # PNG
       - '**/*.gif'  # GIF
-    paths-ignore:
-      - "*.txt"
 jobs:
   deploy:
     runs-on: ubuntu-latest
