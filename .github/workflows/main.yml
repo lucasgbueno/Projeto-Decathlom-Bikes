@@ -74,7 +74,7 @@ jobs:
           chmod 600 ssh_key.pem
           # Copiar arquivo para as instâncias EC2
           for EC2_IP in $EC2_IPS; do
-            scp -i ssh_key.pem  "${{ github.workspace }}/images/*" $ec2-user@$EC2_IP:/mnt/efs/
+            scp -i ssh_key.pem images/* $ec2-user@$EC2_IP:/mnt/efs
 
 
 
