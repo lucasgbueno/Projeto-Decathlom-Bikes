@@ -60,17 +60,13 @@ jobs:
         run: |
           INSTANCE1_IP=$(terraform output -raw instance_ip_1)
           INSTANCE2_IP=$(terraform output -raw instance_ip_2)
-          echo "IP da instância 1: $INSTANCE1_IP"
 
       - name: Adicionar EC2 ao known-hosts
         run: |
-          ls ~/.ssh/known_hosts
-          ls ~/.ssh/id_rsa
-          echo "IP da instância 1: $INSTANCE1_IP"
           sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
           sudo ssh-keyscan -H $INSTANCE1_IP >> ~/.ssh/known_hosts
         env:
-          EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
+          INSTANCE1_IP: ${{ steps.get-instance-ip.outputs.instance_ip_1 }}
 
       - name: Verificar a chave
         run: echo "$SSH_PRIVATE_KEY"
@@ -84,7 +80,7 @@ jobs:
           sudo scp -i ssh_key.pem images/* ec2-user@INSTANCE1_IP:/mnt/efs
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          EC2_IP: ${{ steps.get-ec2-ips.outputs.ec2_ips }}
+          INSTANCE1_IP: ${{ steps.get-instance-ip.outputs.instance_ip_1 }}
 
 
 
